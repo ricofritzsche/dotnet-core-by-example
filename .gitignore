@@ -1,0 +1,73 @@
+# .NET Core files
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Idea
+.idea/
+
+# Visual Studio files
+.vs/
+*.nupkg
+*.user
+*.suo
+*.userprefs
+*.symbols.nupkg
+*.pfx
+*.publishsettings
+
+# User-specific files
+*.sln.docstates
+*.sln.ide/
+
+# NuGet
+packages/
+!**/packages/build/
+!**/packages/tools/
+
+# R# files
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity
+_TeamCity*
+
+# Build Results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Bb]uild/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Others
+ClientBin/
+[Ss]tyle[Cc]op.*
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.p7s
+*.publishproj
+*.pfx
+*.publishsettings
+node_modules/
+orleans.codegen.cs
+
