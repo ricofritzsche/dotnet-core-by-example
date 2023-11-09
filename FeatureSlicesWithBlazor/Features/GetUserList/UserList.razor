@@ -54,18 +54,18 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _model = await Mediator.Send(new GetUserList());
+        _model = await Mediator.Send(new GetUserListQuery());
     }
     
     private async Task PreviousPage()
     {
         _currentPage--;
-        _model = await Mediator.Send(new GetUserList(PageSize,_currentPage));
+        _model = await Mediator.Send(new GetUserListQuery(PageSize,_currentPage));
     }
     
     private async Task NextPage()
     {
         _currentPage++;
-        _model = await Mediator.Send(new GetUserList(PageSize,_currentPage));
+        _model = await Mediator.Send(new GetUserListQuery(PageSize,_currentPage));
     }
 }
