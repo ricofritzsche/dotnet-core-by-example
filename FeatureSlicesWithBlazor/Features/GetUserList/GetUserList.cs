@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FeatureSlicesWithBlazor.Features.GetUserList;
 
 // Input (Request)
-public record GetUserListQuery(int PageSize = 10, int Page = 1) : IRequest<GetUserListViewModel>;
+public record GetUserList(int PageSize = 10, int Page = 1) : IRequest<GetUserListViewModel>;
 
 // Output (Response)
 public record GetUserListViewModel(IEnumerable<UserViewModel> Users, int TotalRecords, int Page, int TotalPages);
@@ -14,9 +14,9 @@ public record GetUserListViewModel(IEnumerable<UserViewModel> Users, int TotalRe
 public record UserViewModel(Guid UserId, string DisplayName);
 
 // Handler, Domain Logic
-public class GetUserListRequestHandler(AppDbContext dbContext) : IRequestHandler<GetUserListQuery, GetUserListViewModel>
+public class GetUserListRequestHandler(AppDbContext dbContext) : IRequestHandler<GetUserList, GetUserListViewModel>
 {
-    public async Task<GetUserListViewModel> Handle(GetUserListQuery request, CancellationToken cancellationToken)
+    public async Task<GetUserListViewModel> Handle(GetUserList request, CancellationToken cancellationToken)
     {
         var pageSize = request.PageSize; // The number of records per page
         var pageNumber = request.Page; // The current page number
