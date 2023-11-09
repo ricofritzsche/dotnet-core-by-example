@@ -1,0 +1,71 @@
+@page "/users"
+
+@attribute [StreamRendering(true)]
+@attribute [RenderModeInteractiveServer]
+
+@using MediatR
+@using Microsoft.AspNetCore.Components.Web
+@inject IMediator  Mediator
+
+<h3>User List</h3>
+
+@if (_model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>User Count: @_model.TotalRecords</p>
+    <div class="table-responsive">
+        <table class="table mb-0 table-bordered  table-hover table-striped small">
+            <thead>
+            <tr>
+                <th class="py-2" scope="col">Id</th>
+                <th class="py-2" scope="col">Username</th>
+                <th class="py-2" scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var item in _model.Users)
+            {
+                <tr>
+                    <td>@item.UserId</td>
+                    <td>@item.DisplayName</td>
+                    <td>
+                        <a class="text-blue-500 hover:text-blue-700" href="/users/@item.UserId">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+            }</tbody>
+        </table>
+        <p role="status">Page: @_currentPage of @_model.TotalPages</p>
+        <button disabled="@(_currentPage == 1)" class="btn btn-primary" @onclick="PreviousPage">Previous Page</button>
+        <button disabled="@(_currentPage == _model.TotalPages)" class="btn btn-primary" @onclick="NextPage">Next Page</button>
+        
+    </div>
+}
+
+@code {
+    private GetUserListViewModel? _model;
+    private int _currentPage = 1;
+        private const int PageSize = 10;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await Mediator.Send(new GetUserListQuery());
+    }
+    
+    private async Task PreviousPage()
+    {
+        _currentPage--;
+        _model = await Mediator.Send(new GetUserListQuery(PageSize,_currentPage));
+    }
+    
+    private async Task NextPage()
+    {
+        _currentPage++;
+        _model = await Mediator.Send(new GetUserListQuery(PageSize,_currentPage));
+    }
+}
