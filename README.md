@@ -1,4 +1,4 @@
-# dotnet-core-by-example
+# .NET Core By Example
 ### A Repository of Learning Through Practical Implementation 
 
 ## Content
