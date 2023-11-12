@@ -1,0 +1,51 @@
+﻿@page "/"
+@attribute [RenderModeInteractiveServer]
+@implements IDisposable
+
+<EditForm Model="@_employee">
+    <h3>Display Name: @_employee.DisplayName</h3>
+    <div class="form-group mb-lg-3">
+        <label for="FirstName">First Name:</label>
+        <input id="FirstName" @bind:event="oninput" @bind:get="_employee.FirstName" @bind:set="OnFirstNameInput" class="form-control mb-2" />
+        
+        <label for="LastName">Last Name:</label>
+        <input id="LastName" @bind:event="oninput" @bind:get="_employee.LastName" @bind:set="OnLastNameInput" class="form-control mb-2" />
+    </div>
+    @if (string.IsNullOrEmpty(_employee.FirstName))
+    {
+        <p>Type first name and last name to see how it works...</p>
+    }
+    
+</EditForm>
+
+@code {
+    private readonly Employee _employee = new ();
+
+    private void OnFirstNameInput(string? value)
+    {
+        var newName = value ?? string.Empty;
+        _employee.FirstName = newName.Length > 10 ? "Too Long!" : newName;
+        
+        Console.WriteLine($"FirstName changed on server: {_employee.FirstName}");
+    }
+
+    private void OnLastNameInput(string? value)
+    {
+        var newName = value ?? string.Empty;
+        _employee.LastName = newName.Length > 10 ? "Too Long!" : newName;
+        
+        Console.WriteLine($"LastName changed on server: {_employee.LastName}");
+    }
+    
+    public class Employee
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string DisplayName => FirstName + " " + LastName;
+    }
+    
+    public void Dispose()
+    {
+        Console.WriteLine("Component disposed: " + nameof(Home));
+    }
+}
