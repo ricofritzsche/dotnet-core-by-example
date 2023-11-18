@@ -1,0 +1,42 @@
+@attribute [StreamRendering(true)]
+
+@using MediatR
+@using Microsoft.AspNetCore.Components.Web
+@inject IMediator  Mediator
+
+
+@if (_model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Edit Flight: @_model.Flight to @_model.Destination</h3>
+    <p>Status: @_model.Status.ToString()</p>                       
+    <p>Scheduled: @_model.Scheduled.Date @_model.Scheduled.ToString("hh:mm tt")</p>   
+    <p>Actual: @_model.Actual.Date @_model.Actual.ToString("hh:mm tt")</p>
+    <button class="btn btn-primary" @onclick="SetDelay">Set 30 Minutes Delay</button>
+
+                                                                  
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    
+    private FlightEditViewModel? _model;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await Mediator.Send(new GetFlightEditQuery(Guid.Parse(Id)));
+    }
+    
+    private async Task SetDelay()
+    {
+        var command = new SetDelayCommand(_model.Id, 30);
+
+        await Mediator.Send(command);
+
+        _model = await Mediator.Send(new GetFlightEditQuery(Guid.Parse(Id)));
+    }
+}

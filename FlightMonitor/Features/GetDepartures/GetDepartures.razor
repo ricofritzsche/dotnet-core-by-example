@@ -1,0 +1,77 @@
+@attribute [StreamRendering(true)]
+@rendermode InteractiveServer
+
+@inject IConfiguration Configuration
+@using MediatR
+@using Microsoft.AspNetCore.Components.Web
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@inject IMediator  Mediator
+@using Microsoft.AspNetCore.SignalR.Client
+
+@if (_model == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table mb-0 table-bordered  table-hover table-striped small">
+            <thead>
+            <tr>
+                <th class="py-2" scope="col">Time</th>
+                <th class="py-2" scope="col">Destination</th>
+                <th class="py-2" scope="col">Flight</th>
+                <th class="py-2" scope="col">Status</th>
+                <th class="py-2" scope="col"/>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var item in _model.Departures)
+            {
+                <tr class="@(item.Status == "Delayed" ? "delayed-status" : "")">
+                    <td>@item.Time</td>
+                    <td>@item.Destination</td>
+                    <td>@item.Flight</td>
+                    <td>@item.Status</td>
+                    <td><a href="/flight/@item.Id">Edit</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+    </div>
+}
+
+@code {
+    private GetDeparturesViewModel? _model;
+    private HubConnection? _hubConnection = null;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await Mediator.Send(new GetDeparturesQuery());
+
+        var hubUrl = Configuration["SignalRHubUrl"];
+        _hubConnection = new HubConnectionBuilder().WithUrl(hubUrl!).Build();
+        _hubConnection.On("RefreshFlightList", async () =>
+        {
+            try
+            {
+                var newModel = await Mediator.Send(new GetDeparturesQuery());
+                await InvokeAsync(() => 
+                {
+                    _model = newModel;
+                    StateHasChanged(); // Ensure this is inside InvokeAsync
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error refreshing flight list: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
+
+        });
+        
+        await _hubConnection.StartAsync();
+    }
+}

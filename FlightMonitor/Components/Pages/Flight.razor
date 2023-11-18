@@ -1,0 +1,11 @@
+@page "/flight/{Id}"
+@rendermode InteractiveServer
+
+<PageTitle>Edit Flight</PageTitle>
+<FlightMonitor.Features.EditFlight.EditFlight Id="@Id" />
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}

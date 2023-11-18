@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
     <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
       <_ContentIncludedByDefault Remove="wwwroot\favicon.ico" />
